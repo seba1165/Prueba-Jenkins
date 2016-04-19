@@ -24,7 +24,26 @@ public class Persona implements Serializable {
     private Long id;
     private String name;
     private String email;
+    private String rut;
 
+    public Persona(String name, String email, String rut) {
+        this.name = name;
+        this.email = email;
+        this.rut = rut;
+    }
+
+    public Persona() {
+    }
+    
+    
+    public String getRut() {
+        return rut;
+    }
+
+    public void setRut(String rut) {
+        this.rut = rut;
+    }
+    
     public String getName() {
         return name;
     }
@@ -40,8 +59,6 @@ public class Persona implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-    
-    
 
     public Long getId() {
         return id;
@@ -74,6 +91,30 @@ public class Persona implements Serializable {
     @Override
     public String toString() {
         return "entities.Persona[ id=" + id + " ]";
+    }
+    
+    public boolean rutValido(){
+        boolean validacion = false;
+        try {
+            this.rut = this.rut.toUpperCase();
+            this.rut = this.rut.replace(".", "");
+            this.rut = this.rut.replace("-", "");
+            int rutAux = Integer.parseInt(this.rut.substring(0, this.rut.length() - 1));
+
+            char dv = this.rut.charAt(this.rut.length() - 1);
+
+            int m = 0, s = 1;
+            for (; rutAux != 0; rutAux /= 10) {
+            s = (s + rutAux % 10 * (9 - m++ % 6)) % 11;
+            }
+            if (dv == (char) (s != 0 ? s + 47 : 75)) {
+            validacion = true;
+            }
+        }catch (java.lang.NumberFormatException e) {
+        } 
+        catch (Exception e) {
+        }
+        return validacion;
     }
     
 }
